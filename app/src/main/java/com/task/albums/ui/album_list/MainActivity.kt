@@ -1,7 +1,8 @@
-package com.task.albums
+package com.task.albums.ui.album_list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.task.albums.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
