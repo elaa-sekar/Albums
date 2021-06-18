@@ -12,7 +12,7 @@ object LogUtils {
         try {
             output = JSONObject(Gson().toJson(data)).toString(4)
         } catch (e: Exception) {
-            Timber.d("JSON Object Exception ${e.message}")
+            Timber.d("JSON Object Exception ${e.message ?: e}")
         }
         return output
     }
@@ -22,7 +22,7 @@ object LogUtils {
         try {
             output = JSONArray(Gson().toJson(data)).toString(4)
         } catch (e: Exception) {
-            Timber.d("JSON Array Exception ${e.message}")
+            Timber.d("JSON Array Exception ${e.message ?: e}")
         }
         return output
     }
