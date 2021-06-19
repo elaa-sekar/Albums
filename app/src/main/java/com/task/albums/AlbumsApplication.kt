@@ -1,4 +1,4 @@
-package com.task.albums.utils
+package com.task.albums
 
 import android.app.Application
 

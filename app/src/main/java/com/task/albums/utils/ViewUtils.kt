@@ -20,7 +20,9 @@ import java.util.*
 object ViewUtils {
 
     fun Context.showMessage(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        if (!message.isNullOrEmpty()) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun ImageView.loadImage(url: String?) {

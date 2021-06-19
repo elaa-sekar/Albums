@@ -21,10 +21,10 @@ interface AlbumsDao {
         }
     }
 
-    @Query("SELECT * FROM album")
-    fun getAllAlbums(): Flow<List<Album>>
+    @Query("SELECT * FROM albums")
+    fun getAllAlbums(): LiveData<List<Album>>
 
-    @Query("SELECT * FROM album WHERE id = :albumId")
+    @Query("SELECT * FROM albums WHERE id = :albumId")
     suspend fun getAlbumDetails(albumId: Int): Album
 
 }
