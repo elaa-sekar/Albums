@@ -7,7 +7,7 @@ import java.net.HttpURLConnection.*
 
 object NetworkUtils {
 
-    const val HTTP_TOO_MANY_REQUESTS = 429
+    private const val HTTP_TOO_MANY_REQUESTS = 429
 
     fun isInternetAvailable(context: Context): Boolean {
         return isWifiTurnedOn(context) || isMobileDataTurnedOn(context)

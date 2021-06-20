@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DataBaseModule {
 
+    @Provides
     fun provideAlbumDataBase(@ApplicationContext context: Context): AlbumsDataBase {
         return Room.databaseBuilder(
             context,

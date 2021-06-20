@@ -37,6 +37,10 @@
                 android:layout_margin="@dimen/_8sdp"
                 android:ellipsize="marquee"
                 android:singleLine="true"
+                android:text="@{model.title}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/ivFavorite"
                 app:layout_constraintStart_toEndOf="@+id/ivAlbum"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +54,8 @@
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{model.userName}"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ivFavorite"
                 app:layout_constraintStart_toEndOf="@+id/ivAlbum"
@@ -57,13 +63,13 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivFavorite"
-                android:layout_width="@dimen/_28sdp"
-                android:layout_height="@dimen/_28sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@{model.favourite ? @drawable/ic_heart_filled: @drawable/ic_heart_unfilled}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_heart_filled" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

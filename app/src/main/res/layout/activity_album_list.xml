@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.task.albums.utils.ConstantsKt" />
+
         <variable
             name="viewModel"
             type="com.task.albums.ui.album_list.AlbumListViewModel" />
@@ -36,7 +38,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -45,9 +46,9 @@
                         android:id="@+id/ivSearch"
                         android:layout_width="@dimen/_26sdp"
                         android:layout_height="@dimen/_24sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:scaleType="fitCenter"
-                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/ivFilter"
                         app:layout_constraintTop_toTopOf="parent"
@@ -57,40 +58,48 @@
                         android:id="@+id/ivFilter"
                         android:layout_width="@dimen/_28sdp"
                         android:layout_height="@dimen/_26sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:scaleType="fitCenter"
-                        android:visibility="gone"
+                        android:visibility="@{viewModel.optionsVisibility}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/ivViewType"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_sort" />
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etSearch"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_6sdp"
                         android:background="@drawable/shape_search_box"
-                        android:layout_marginBottom="@dimen/_2sdp"
                         android:drawableStart="@drawable/ic_search_blue"
-                        android:paddingHorizontal="@dimen/_4sdp"
                         android:drawablePadding="@dimen/_4sdp"
+                        android:elevation="@dimen/_2sdp"
                         android:hint="@string/search_album"
-                        android:textColor="@color/white"
+                        android:paddingHorizontal="@dimen/_4sdp"
+                        android:textColor="@color/black"
                         android:textColorHint="@color/spun_pearl"
-                        android:visibility="visible"
+                        android:textSize="@dimen/_13ssp"
+                        android:text="@={viewModel.searchText}"
+                        android:visibility="@{viewModel.searchBarVisibility}"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ivFilter"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_goneMarginEnd="@dimen/_12sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/ivClose"
                         android:layout_width="@dimen/_24sdp"
                         android:layout_height="@dimen/_24sdp"
                         android:layout_marginEnd="@dimen/_4sdp"
                         android:background="@android:color/transparent"
+                        android:elevation="@dimen/_2sdp"
                         android:src="@drawable/ic_close"
+                        android:visibility="@{viewModel.searchBarVisibility}"
                         app:layout_constraintBottom_toBottomOf="@id/etSearch"
                         app:layout_constraintEnd_toEndOf="@id/etSearch"
                         app:layout_constraintTop_toTopOf="@id/etSearch" />
@@ -99,13 +108,14 @@
                         android:id="@+id/ivViewType"
                         android:layout_width="@dimen/_26sdp"
                         android:layout_height="@dimen/_26sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:scaleType="fitCenter"
-                        android:visibility="gone"
+                        android:src="@{viewModel.selectedViewType == ConstantsKt.GRID ? @drawable/ic_view_list : @drawable/ic_grid}"
+                        android:visibility="@{viewModel.optionsVisibility}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_view_list" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -113,24 +123,37 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:background="@drawable/shape_curved_layout"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:id="@+id/rvAlbums"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_12sdp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAlbums"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingBottom="@dimen/_24sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

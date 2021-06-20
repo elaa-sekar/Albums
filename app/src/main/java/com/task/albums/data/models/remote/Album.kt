@@ -7,15 +7,5 @@ data class Album(
     @SerializedName("userId") val userId: Long,
     @SerializedName("title") val title: String
 ) {
-    companion object {
-        fun toAlbumEntity(album: Album): com.task.albums.data.database.entities.Album {
-            album.run {
-                return com.task.albums.data.database.entities.Album(
-                    id,
-                    userId,
-                    title
-                )
-            }
-        }
-    }
+
 }

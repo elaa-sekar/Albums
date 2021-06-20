@@ -8,5 +8,7 @@ data class Album(
     @PrimaryKey
     val id: Long,
     val userId: Long,
-    val title: String
+    val title: String,
+    var userName: String?,
+    val isFavourite: Boolean
 )

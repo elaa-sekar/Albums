@@ -3,6 +3,7 @@ package com.task.albums.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -23,6 +24,14 @@ object ViewUtils {
         if (!message.isNullOrEmpty()) {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun View.show(){
+        visibility = View.VISIBLE
+    }
+
+    fun View.hide(){
+        visibility = View.GONE
     }
 
     fun ImageView.loadImage(url: String?) {

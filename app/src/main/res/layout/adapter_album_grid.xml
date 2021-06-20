@@ -35,9 +35,14 @@
                 android:id="@+id/tvAlbumTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:ellipsize="marquee"
                 android:singleLine="true"
+                android:text="@{model.title}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/ivFavorite"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivAlbum" />
@@ -46,11 +51,13 @@
                 android:id="@+id/tvUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{model.userName}"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ivFavorite"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,13 +65,13 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivFavorite"
-                android:layout_width="@dimen/_28sdp"
-                android:layout_height="@dimen/_28sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:src="@{model.favourite ? @drawable/ic_heart_filled: @drawable/ic_heart_unfilled}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivAlbum"
-                app:srcCompat="@drawable/ic_heart_unfilled" />
+                app:layout_constraintTop_toBottomOf="@id/ivAlbum" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
