@@ -63,7 +63,6 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:scaleType="fitCenter"
-                        android:visibility="@{viewModel.optionsVisibility}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/ivViewType"
                         app:layout_constraintTop_toTopOf="parent"
