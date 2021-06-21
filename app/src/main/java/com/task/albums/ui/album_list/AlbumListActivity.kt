@@ -84,7 +84,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
             ) else LinearLayoutManager(this)
     }
 
-    /* To initialize the Livadata to observe changes in
+    /* To initialize the Livedata to observe changes in
        Album List trigger from View Model */
     private fun initObservers() {
         viewModel.apply {
