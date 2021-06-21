@@ -1,5 +1,7 @@
 package com.task.albums.utils
 
+// One common Singleton class for Various Constants
+
 object ViewType {
     const val GRID = 1
     const val LIST = 2

@@ -9,10 +9,12 @@ object NetworkUtils {
 
     private const val HTTP_TOO_MANY_REQUESTS = 429
 
+    // Method to check internet availability
     fun isInternetAvailable(context: Context): Boolean {
         return isWifiTurnedOn(context) || isMobileDataTurnedOn(context)
     }
 
+    // Method to check wifi availability
     private fun isWifiTurnedOn(context: Context): Boolean {
 
         getConnectivityManager(context)?.let {
@@ -23,6 +25,7 @@ object NetworkUtils {
         return false
     }
 
+    // Method to check Mobile Data availability
     private fun isMobileDataTurnedOn(context: Context): Boolean {
 
         getConnectivityManager(context)?.let {
@@ -38,6 +41,7 @@ object NetworkUtils {
     }
 
 
+    // Common method to get message for the specific newtwork response code
     fun getHttpStatusResponseMessage(httpStatus: Int): String {
         return "$httpStatus - ${
             when (httpStatus) {

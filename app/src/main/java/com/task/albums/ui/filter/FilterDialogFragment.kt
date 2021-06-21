@@ -30,6 +30,7 @@ class FilterDialogFragment : DialogFragment(), FilterSelectionListener {
         private const val SELECTED_FILTER_TYPE = "selected_filter_type"
         private const val SELECTED_SORT_TYPE = "selected_sort_type"
 
+        // Static method to avoid Crashes as the Dialog fragment requires empty constructor when app is resumed
         @JvmStatic
         fun newInstance(
             selectedFilterType: Int,
@@ -64,6 +65,7 @@ class FilterDialogFragment : DialogFragment(), FilterSelectionListener {
         return binding.root
     }
 
+    // To get & set to feed the selected inputs to Viewmodel
     private fun initInputDetails() {
         arguments?.apply {
             Timber.d("Selected Filter Type 2 ${getInt(SELECTED_FILTER_TYPE, FilterType.NONE)}")
@@ -74,6 +76,7 @@ class FilterDialogFragment : DialogFragment(), FilterSelectionListener {
         }
     }
 
+    // One method to initialize onClickListener for each clickable items
     private fun initOnClickListeners() {
         binding.apply {
             btnSubmit.setOnClickListener {
@@ -90,6 +93,7 @@ class FilterDialogFragment : DialogFragment(), FilterSelectionListener {
         return android.R.style.Theme_Material_Light_Dialog_NoActionBar_MinWidth
     }
 
+    // One method to set layout manager & adapter for the both recycler views ( SortTypes & FilterTypes)
     private fun initLayoutManagerAndAdapters() {
         binding.apply {
             rvFilter.apply {
@@ -120,11 +124,13 @@ class FilterDialogFragment : DialogFragment(), FilterSelectionListener {
 
     }
 
+    // To update the selected filter type in ViewModel
     override fun onFilterTypeSelected(selectedFilterType: Int) {
         Timber.d("Input selectedFilterType $selectedFilterType")
         viewModel.selectedFilterType = selectedFilterType
     }
 
+    // To update the selected sort type in ViewModel
     override fun onSortTypeSelected(selectedSortType: Int) {
         Timber.d("Input selectedSortType $selectedSortType")
         viewModel.selectedSortType = selectedSortType

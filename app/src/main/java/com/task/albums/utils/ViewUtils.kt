@@ -20,6 +20,7 @@ import timber.log.Timber
 import java.nio.ByteBuffer
 import java.util.*
 
+// Singleton Utility Class to have all the extensions of Views
 object ViewUtils {
 
     fun Context.showMessage(message: String?) {

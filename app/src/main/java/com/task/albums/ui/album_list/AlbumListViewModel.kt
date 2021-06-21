@@ -48,7 +48,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         selectedSortType = sortType
     }
 
-    // Data binding
+    // Data binding parameters
     val searchText = ObservableField("")
     val searchBarVisibility = ObservableField(View.GONE)
 
@@ -57,19 +57,21 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
     val noDataVisibility = ObservableField(View.GONE)
     val selectedViewType = ObservableField(ViewType.GRID)
 
-
+    // One common exception handler to handle all exception occurs inside the tasks handled by Coroutines
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         triggerEvent(EventHandler.NotifyEvent(throwable.message, EventType.ERROR))
         triggerEvent(EventHandler.StopLoading)
         Timber.e(throwable)
     }
 
+    // A specific class to handle events via Channel
     sealed class EventHandler {
         data class NotifyEvent(val message: String?, val eventType: Int) : EventHandler()
         object StartLoading : EventHandler()
         object StopLoading : EventHandler()
     }
 
+    // A common method to trigger events which will be received by Event Handler
     private fun triggerEvent(event: EventHandler) =
         viewModelScope.launch { _eventHandler.send(event) }
 
@@ -77,16 +79,19 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         repository.requestAlbums().let {
             if (it.isNotEmpty()) {
                 repository.saveAlbums(it.toAlbumEntitiesList())
-                updateAllAlbumsFromDB()
+                getAllAlbumsFromDB()
             }
         }
     }
 
+     /*One common method to run the long running tasks
+     like Network request, DB Update in Worker Thread via Coroutines*/
     private fun launchTaskInBackground(function: suspend () -> Unit) =
         viewModelScope.launch(Dispatchers.IO + exceptionHandler + job) {
             function.invoke()
             triggerEvent(EventHandler.StopLoading)
         }
+
 
     fun updateSearchBarVisibility(show: Boolean) {
         searchBarVisibility.set(if (show) View.VISIBLE else View.GONE)
@@ -106,6 +111,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // An utility method to convert Albums from Remote Data Source Model into Album Entities List
     private suspend fun List<com.task.albums.data.models.remote.Album>.toAlbumEntitiesList(): List<Album> {
         ArrayList<Album>().apply {
             this@toAlbumEntitiesList.forEach { album ->
@@ -116,6 +122,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // An support method to convert Single Album Remote Data Source Model into Single Album Entity
     private suspend fun getAlbumEntity(album: com.task.albums.data.models.remote.Album): Album {
         album.run {
             return Album(
@@ -128,6 +135,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // To update the favourite in DB and updating the List upon successful completion of update Query
     fun updateFavourite(albumId: Long, favorite: Int) {
         launchTaskInBackground {
             repository.updateFavourite(Favourite(albumId, favorite))
@@ -135,6 +143,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // To search albums
     fun searchAlbums(searchPhrase: String) {
         launchTaskInBackground {
             val rawQuery =
@@ -144,8 +153,8 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
-
-    fun updateAllAlbumsFromDB() {
+    // To get all the available album data from DB
+    fun getAllAlbumsFromDB() {
         launchTaskInBackground {
             val rawQuery =
                 "SELECT * FROM albums ${setFilterTypeForQuery(false)} ORDER BY ${setSortTypeForQuery()}"
@@ -153,12 +162,14 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // To update the existing the list based on search Visibility
     fun updateExistingAlbums() {
         if (searchBarVisibility.get() == View.VISIBLE) {
             searchText.get()?.let { searchAlbums(searchPhrase = it) }
-        } else updateAllAlbumsFromDB()
+        } else getAllAlbumsFromDB()
     }
 
+    // Common short-hand method to supply selected filter type to Raw Query to get Albums List
     private fun setFilterTypeForQuery(isForSearch: Boolean): String {
         return when (selectedFilterType) {
             FilterType.NONE -> ""
@@ -168,6 +179,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
+    // Common method to supply selected Sort type to Raw Query to get Albums List
     private fun setSortTypeForQuery(): String {
         return when (selectedSortType) {
             SortType.DEFAULT -> "id"

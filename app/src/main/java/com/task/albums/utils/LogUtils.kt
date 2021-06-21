@@ -5,8 +5,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 
+// Singleton Class to have custom Log Utility Methods
 object LogUtils {
 
+    // Method to get JSON output of Any Kotlin Object
     fun printAsJSON(data: Any): String {
         var output = ""
         try {
@@ -17,6 +19,7 @@ object LogUtils {
         return output
     }
 
+    // Method to get JSON output of Any Kotlin List of Objects
     fun printAsJSON(data: List<Any>): String {
         var output = ""
         try {

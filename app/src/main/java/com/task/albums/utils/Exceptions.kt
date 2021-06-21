@@ -2,6 +2,7 @@ package com.task.albums.utils
 
 import java.io.IOException
 
+// To maintain all the custom classes
 class NoInternetException(message: String) : IOException(message)
 class ApiException(message: String) : IOException(message)
 class BadRequestException(message: String) : IOException(message)

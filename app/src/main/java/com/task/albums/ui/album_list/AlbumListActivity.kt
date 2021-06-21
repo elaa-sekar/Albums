@@ -24,8 +24,6 @@ import com.task.albums.utils.ViewType
 import com.task.albums.utils.ViewUtils.showMessage
 import com.task.albums.utils.ViewUtils.showMessageInSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -54,6 +52,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         viewModel.getAlbums()
     }
 
+    // One method to update swipe to refresh behaviours like updating color & setting refresh Listener
     private fun initSwipeRefreshListener() {
         binding.swipeRefresh.apply {
             setColorSchemeResources(R.color.white)
@@ -75,6 +74,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // To update the layout manager when View type changed to Either Grid or List
     private fun setLayoutManager(selectedViewType: Int) {
         Timber.d("Selected ViewType $selectedViewType")
         binding.rvAlbums.layoutManager =
@@ -84,6 +84,8 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
             ) else LinearLayoutManager(this)
     }
 
+    /* To initialize the Livadata to observe changes in
+       Album List trigger from View Model */
     private fun initObservers() {
         viewModel.apply {
             albumsLiveData.observe(this@AlbumListActivity) { albumList ->
@@ -92,6 +94,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // Method to Update Album List UI with Other View Elements
     private fun updateUI(albumsList: List<Album>?) {
         albumsList?.let {
             updateAlbumsAdapter(albumsList.toMutableList() as ArrayList<Album>)
@@ -102,6 +105,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // Method to update the album adapter as per the selected View Type (Grid or List)
     private fun updateAlbumsAdapter(albumsList: ArrayList<Album>) {
         viewModel.selectedViewType.get()?.let {
             if (it == ViewType.GRID) switchToGridView(albumsList)
@@ -109,6 +113,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // To initialize or update the Grid Adapter
     private fun switchToListView(albumsList: List<Album>) {
         binding.rvAlbums.apply {
             if (adapter != null && adapter == albumsListAdapter) {
@@ -123,6 +128,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // To initialize or update the List Adapter
     private fun switchToGridView(albumsList: ArrayList<Album>) {
         binding.rvAlbums.apply {
             Timber.d("Grid View Update $adapter - ${adapter == albumsGridAdapter}")
@@ -140,6 +146,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // Method to handle various Events & States via ViewModel Trigger
     private fun initEventHandler() {
         lifecycleScope.launchWhenResumed {
             viewModel.eventHandler.collectLatest {
@@ -152,7 +159,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
                                     delay(1000)
                                     showMessageInSnackBar(
                                         binding.coordinatorLayout,
-                                        "Showing Offline Data"
+                                        "Showing Offline Data Only"
                                     )
                                     delay(1000)
                                     viewModel.updateExistingAlbums()
@@ -164,20 +171,28 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
                     }
                     is StartLoading -> binding.swipeRefresh.isRefreshing = true
                     is StopLoading -> binding.swipeRefresh.isRefreshing = false
+                    else -> {
+
+                    }
                 }
             }
         }
     }
 
+    // One method to set OnClick listener for each clickable views in the layout
     private fun initOnClickListeners() {
+
         binding.apply {
+
             ivSearch.setOnClickListener {
                 this@AlbumListActivity.viewModel.updateSearchBarVisibility(true)
                 initSearchPhraseListener()
             }
+
             ivFilter.setOnClickListener {
                 showFilterDialog()
             }
+
             ivViewType.setOnClickListener {
                 this@AlbumListActivity.viewModel.apply {
                     updateSelectedViewType()
@@ -185,20 +200,24 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
                     reloadExistingAlbums()
                 }
             }
+
             ivClose.setOnClickListener {
                 removeSearchPhraseListener()
                 with(this@AlbumListActivity.viewModel) {
                     updateSearchBarVisibility(false)
-                    updateAllAlbumsFromDB()
+                    getAllAlbumsFromDB()
                 }
             }
         }
+
     }
 
+    // To update the same existing Album data when the view type is Changed
     private fun reloadExistingAlbums() {
         viewModel.albumsLiveData.value?.let { updateAlbumsAdapter(it.toMutableList() as ArrayList<Album>) }
     }
 
+    // To show the filter & sorting Dialog
     private fun showFilterDialog() {
         Timber.d("Existing type ${viewModel.selectedFilterType} ${viewModel.selectedSortType}")
         FilterDialogFragment.newInstance(
@@ -210,6 +229,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // Method to initialize textWatcher for updating the
     private fun initSearchPhraseListener() {
 
         searchTextWatcher = object : TextWatcher {
@@ -231,6 +251,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         binding.etSearch.addTextChangedListener(searchTextWatcher)
     }
 
+    // To remove the search text listener after closing the search EditText
     private fun removeSearchPhraseListener() {
         binding.etSearch.apply {
             text = null
@@ -239,10 +260,12 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         }
     }
 
+    // To update the
     override fun updateFavorite(albumId: Long, isFavorite: Int) {
         viewModel.updateFavourite(albumId, isFavorite)
     }
 
+    // to update the user's input of selected Filter and Sort type upon Submit
     override fun notifyFilterSelected(selectedFilterType: Int, selectedSortType: Int) {
         viewModel.apply {
             Timber.d("Filter type $selectedFilterType Sort Type $selectedSortType")

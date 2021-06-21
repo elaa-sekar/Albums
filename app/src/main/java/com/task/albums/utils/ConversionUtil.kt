@@ -1,5 +1,7 @@
 package com.task.albums.utils
 
+import com.task.albums.data.database.entities.Album
+
 object ConversionUtil {
 
 //    fun List<com.task.albums.data.models.remote.Album>.toAlbumEntity(): List<Album> {
@@ -11,4 +13,5 @@ object ConversionUtil {
 //            return it
 //        }
 //    }
+
 }

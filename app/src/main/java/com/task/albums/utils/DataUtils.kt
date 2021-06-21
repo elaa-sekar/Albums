@@ -3,8 +3,10 @@ package com.task.albums.utils
 import com.task.albums.data.models.local.FilterItem
 import com.task.albums.data.models.local.SortItem
 
+// Common Singleton class to hold all the static/sample/dummy data
 object DataUtils {
 
+    // To get the Static List of Filter Items
     fun getFilterItemsList(): List<FilterItem> {
         val filterMap = linkedMapOf(
             Pair(FilterType.NONE, "None"),
@@ -18,6 +20,7 @@ object DataUtils {
         }
     }
 
+    // To get the Static List of Sort Items
     fun getSortItemsList(): List<SortItem> {
         val sortMap = linkedMapOf(
             Pair(SortType.DEFAULT, "Default"),
