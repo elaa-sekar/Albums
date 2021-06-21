@@ -54,14 +54,15 @@ class AlbumsGridAdapter(
     }
 
     fun notifyUpdatedList(albumsList: ArrayList<Album>) {
-        val diffUtilResult = DiffUtil.calculateDiff(
-            LogicUtils.AlbumItemDiffCallback(
-                this.albumsList,
-                albumsList
-            )
-        )
+//        val diffUtilResult = DiffUtil.calculateDiff(
+//            LogicUtils.AlbumItemDiffCallback(
+//                this.albumsList,
+//                albumsList
+//            )
+//        )
         this.albumsList = albumsList
-        diffUtilResult.dispatchUpdatesTo(this)
+//        diffUtilResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     inner class AlbumViewHolder(private val binding: AdapterAlbumGridBinding) :

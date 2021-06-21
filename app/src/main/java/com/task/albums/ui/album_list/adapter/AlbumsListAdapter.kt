@@ -56,16 +56,15 @@ class AlbumsListAdapter(
     }
 
     fun notifyUpdatedList(albumsList: List<Album>) {
-        val recyclerViewState: Parcelable? = mRecyclerView.layoutManager?.onSaveInstanceState()
-        val diffUtilResult = DiffUtil.calculateDiff(
-            LogicUtils.AlbumItemDiffCallback(
-                this.albumsList,
-                albumsList
-            )
-        )
+//        val diffUtilResult = DiffUtil.calculateDiff(
+//            LogicUtils.AlbumItemDiffCallback(
+//                this.albumsList,
+//                albumsList
+//            )
+//        )
         this.albumsList = albumsList
-        diffUtilResult.dispatchUpdatesTo(this)
-        mRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+//        diffUtilResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     inner class AlbumViewHolder(private val binding: AdapterAlbumLinearBinding) :

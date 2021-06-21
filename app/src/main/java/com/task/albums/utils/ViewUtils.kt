@@ -15,7 +15,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.task.albums.R
 import timber.log.Timber
 import java.nio.ByteBuffer
@@ -94,7 +93,7 @@ object ViewUtils {
                     .into(this)
             }
         } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Timber.d("Glide Image Loading Exception $e")
         }
     }
 
