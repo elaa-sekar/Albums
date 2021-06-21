@@ -59,13 +59,13 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
 
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        triggerEvent(EventHandler.NotifyEvent(throwable.message))
+        triggerEvent(EventHandler.NotifyEvent(throwable.message, EventType.ERROR))
         triggerEvent(EventHandler.StopLoading)
         Timber.e(throwable)
     }
 
     sealed class EventHandler {
-        data class NotifyEvent(val message: String?) : EventHandler()
+        data class NotifyEvent(val message: String?, val eventType: Int) : EventHandler()
         object StartLoading : EventHandler()
         object StopLoading : EventHandler()
     }

@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.task.albums.R
 import timber.log.Timber
@@ -28,11 +29,17 @@ object ViewUtils {
         }
     }
 
-    fun View.show(){
+    fun Context.showMessageInSnackBar(view: View, message: String?) {
+        if (!message.isNullOrEmpty()) {
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    fun View.show() {
         visibility = View.VISIBLE
     }
 
-    fun View.hide(){
+    fun View.hide() {
         visibility = View.GONE
     }
 

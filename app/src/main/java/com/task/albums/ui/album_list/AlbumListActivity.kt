@@ -18,8 +18,10 @@ import com.task.albums.ui.album_list.adapter.AlbumsGridAdapter
 import com.task.albums.ui.album_list.adapter.AlbumsListAdapter
 import com.task.albums.ui.filter.FilterDialogFragment
 import com.task.albums.utils.BindingUtils.viewBinding
+import com.task.albums.utils.EventType
 import com.task.albums.utils.ViewType
 import com.task.albums.utils.ViewUtils.showMessage
+import com.task.albums.utils.ViewUtils.showMessageInSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -138,7 +140,17 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
         lifecycleScope.launchWhenResumed {
             viewModel.eventHandler.collectLatest {
                 when (it) {
-                    is NotifyEvent -> showMessage(it.message)
+                    is NotifyEvent -> {
+                        showMessage(it.message)
+                        try {
+                            if (it.eventType == EventType.ERROR) {
+                                showMessageInSnackBar(binding.coordinatorLayout, "Showing Offline Data")
+                                viewModel.updateExistingAlbums()
+                            }
+                        } catch (e: Exception) {
+                            Timber.d("Snackbar Exception $e")
+                        }
+                    }
                     is StartLoading -> binding.swipeRefresh.isRefreshing = true
                     is StopLoading -> binding.swipeRefresh.isRefreshing = false
                 }

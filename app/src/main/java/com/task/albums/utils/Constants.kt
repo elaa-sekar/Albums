@@ -18,3 +18,8 @@ object FilterType {
     const val FAVORITES_ONLY = 2
     const val NON_FAVORITES_ONLY = 3
 }
+
+object EventType {
+    const val ERROR = 0
+    const val SUCCESS = 1
+}
