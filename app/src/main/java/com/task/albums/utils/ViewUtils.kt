@@ -103,17 +103,4 @@ object ViewUtils {
         return true
     }
 
-    fun equals(bitmap1: Bitmap, bitmap2: Bitmap): Boolean {
-        return try {
-            val buffer1: ByteBuffer = ByteBuffer.allocate(bitmap1.height * bitmap1.rowBytes)
-            bitmap1.copyPixelsToBuffer(buffer1)
-            val buffer2: ByteBuffer = ByteBuffer.allocate(bitmap2.height * bitmap2.rowBytes)
-            bitmap2.copyPixelsToBuffer(buffer2)
-            Arrays.equals(buffer1.array(), buffer2.array())
-        } catch (e: Exception) {
-            Timber.d("Bitmap Comparison Exception $e")
-            false
-        }
-    }
-
 }

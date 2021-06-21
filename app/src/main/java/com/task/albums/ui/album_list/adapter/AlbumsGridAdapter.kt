@@ -88,14 +88,4 @@ class AlbumsGridAdapter(
             }
         }
     }
-
-    object AlbumComparator : DiffUtil.ItemCallback<Album>() {
-        override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem.userId == newItem.userId
-        }
-
-        override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem == newItem
-        }
-    }
 }
