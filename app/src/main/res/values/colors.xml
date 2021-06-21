@@ -13,5 +13,8 @@
     <color name="spun_pearl">#A4A2B0</color>
     <color name="tyrian_purple">#2A0000</color>
     <color name="green">#669900</color>
+    <color name="light_grey">#F0F0F0</color>
+    <color name="grey_line">#27656667</color>
+    <color name="night_rider">#313131</color>
 
 </resources>

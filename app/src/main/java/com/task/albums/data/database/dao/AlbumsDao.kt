@@ -18,7 +18,7 @@ interface AlbumsDao {
     suspend fun insertAlbumsList(albums: List<Album>) {
         for (album in albums) {
             if (insertAlbum(album) == -1L) {
-                insertFavourite(Favourite(album.id, false))
+                insertFavourite(Favourite(album.id, 0))
             } else updateTopic(album)
         }
     }
@@ -39,7 +39,7 @@ interface AlbumsDao {
     fun getAllAlbums(query: SupportSQLiteQuery): List<Album>
 
     @Query("UPDATE albums SET isFavourite  = :isFavourite WHERE id = :albumId")
-    suspend fun updateFavouriteInAlbum(albumId: Long, isFavourite: Boolean)
+    suspend fun updateFavouriteInAlbum(albumId: Long, isFavourite: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavourite(favourite: Favourite): Long

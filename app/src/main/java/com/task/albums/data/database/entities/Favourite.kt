@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Favourite(
     @PrimaryKey
     val albumId: Long,
-    val isFavourite: Boolean
+    val isFavourite: Int
 )

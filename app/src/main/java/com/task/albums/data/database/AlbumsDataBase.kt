@@ -6,7 +6,7 @@ import com.task.albums.data.database.dao.AlbumsDao
 import com.task.albums.data.database.entities.Album
 import com.task.albums.data.database.entities.Favourite
 
-@Database(entities = [Album::class, Favourite::class], version = 5, exportSchema = false)
+@Database(entities = [Album::class, Favourite::class], version = 6, exportSchema = false)
 abstract class AlbumsDataBase : RoomDatabase() {
 
     abstract fun getAlbumsDao(): AlbumsDao

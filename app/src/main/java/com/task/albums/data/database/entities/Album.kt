@@ -10,5 +10,5 @@ data class Album(
     val userId: Long,
     val title: String,
     var userName: String,
-    val isFavourite: Boolean
+    val isFavourite: Int
 )

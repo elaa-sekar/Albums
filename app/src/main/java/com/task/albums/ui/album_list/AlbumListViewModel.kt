@@ -32,18 +32,21 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
 
     val albumsLiveData = MutableLiveData<List<Album>>()
 
-    var selectedSortType: Int = 0
-    var selectedFilterType: Int = 0
+    var selectedSortType: Int = -1
+    var selectedFilterType: Int = -1
 
     init {
         setDefaultFilters()
     }
 
     fun setDefaultFilters() {
-        selectedSortType = SortType.TITLE_ASC
-        selectedFilterType = FilterType.NONE
+        updateFilterTypes(FilterType.NONE, SortType.DEFAULT)
     }
 
+    fun updateFilterTypes(filterType: Int, sortType: Int) {
+        selectedFilterType = filterType
+        selectedSortType = sortType
+    }
 
     // Data binding
     val searchText = ObservableField("")
@@ -120,12 +123,12 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
                 userId = userId,
                 title = title,
                 userName = "Unknown",
-                isFavourite = repository.albumsDao.getFavourite(id)?.isFavourite ?: false
+                isFavourite = repository.albumsDao.getFavourite(id)?.isFavourite ?: 0
             )
         }
     }
 
-    fun updateFavourite(albumId: Long, favorite: Boolean) {
+    fun updateFavourite(albumId: Long, favorite: Int) {
         launchTaskInBackground {
             repository.updateFavourite(Favourite(albumId, favorite))
             updateExistingAlbums()
@@ -136,7 +139,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         launchTaskInBackground {
             val rawQuery =
                 "SELECT * FROM albums WHERE title LIKE '%${searchPhrase}%' " +
-                        "${setFilterTypeForQuery(true)}ORDER BY ${setSortTypeForQuery()}"
+                        "${setFilterTypeForQuery(true)} ORDER BY ${setSortTypeForQuery()}"
             albumsLiveData.postValue(repository.searchAlbums(SimpleSQLiteQuery(rawQuery)))
         }
     }
@@ -145,7 +148,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
     fun updateAllAlbumsFromDB() {
         launchTaskInBackground {
             val rawQuery =
-                "SELECT * FROM albums ${setFilterTypeForQuery(false)}ORDER BY ${setSortTypeForQuery()}"
+                "SELECT * FROM albums ${setFilterTypeForQuery(false)} ORDER BY ${setSortTypeForQuery()}"
             albumsLiveData.postValue(repository.getAllAlbums(SimpleSQLiteQuery(rawQuery)))
         }
     }
@@ -159,19 +162,20 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
     private fun setFilterTypeForQuery(isForSearch: Boolean): String {
         return when (selectedFilterType) {
             FilterType.NONE -> ""
-            FilterType.FAVORITES_ONLY -> "${if (isForSearch) "AND" else "WHERE"} isFavorite = true"
-            FilterType.NON_FAVORITES_ONLY -> "${if (isForSearch) "AND" else "WHERE"} isFavorite = false"
+            FilterType.FAVORITES_ONLY -> "${if (isForSearch) "AND" else "WHERE"} isFavourite = 1"
+            FilterType.NON_FAVORITES_ONLY -> "${if (isForSearch) "AND" else "WHERE"} isFavourite = 0"
             else -> ""
         }
     }
 
     private fun setSortTypeForQuery(): String {
         return when (selectedSortType) {
+            SortType.DEFAULT -> "id"
             SortType.TITLE_ASC -> "title ASC"
             SortType.TITLE_DESC -> "title DESC"
             SortType.USER_NAME_ASC -> "userName ASC"
             SortType.USER_NAME_DESC -> "userName DESC"
-            else -> "title ASC"
+            else -> "id"
         }
     }
 

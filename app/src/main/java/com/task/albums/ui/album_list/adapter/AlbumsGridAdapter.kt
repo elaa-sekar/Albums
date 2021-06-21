@@ -82,7 +82,7 @@ class AlbumsGridAdapter(
                 ivFavorite.setOnClickListener {
                     try {
                         albumsList[absoluteAdapterPosition].apply {
-                            listener.updateFavorite(id, !isFavourite)
+                            listener.updateFavorite(id, if(isFavourite == 0) 1 else 0)
                         }
                     } catch (e: Exception) {
                         Timber.d("Favorite Selection Exception $e")

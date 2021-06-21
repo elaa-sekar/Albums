@@ -6,6 +6,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -32,6 +34,18 @@ object ViewUtils {
 
     fun View.hide(){
         visibility = View.GONE
+    }
+
+    fun AppCompatTextView.setTextColor(isSelected: Boolean, source1: Int, source2: Int) {
+        setTextColor(
+            ContextCompat.getColor(
+                context, if (isSelected) source1 else source2
+            )
+        )
+    }
+
+    fun View.setBackground(isSelected: Boolean, source1: Int, source2: Int) {
+        background = ContextCompat.getDrawable(this.context, if (isSelected) source1 else source2)
     }
 
     fun ImageView.loadImage(url: String?) {

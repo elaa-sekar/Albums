@@ -6,10 +6,11 @@ object ViewType {
 }
 
 object SortType {
-    const val TITLE_ASC = 1
-    const val TITLE_DESC = 2
-    const val USER_NAME_ASC = 3
-    const val USER_NAME_DESC = 4
+    const val DEFAULT = 1
+    const val TITLE_ASC = 2
+    const val TITLE_DESC = 3
+    const val USER_NAME_ASC = 4
+    const val USER_NAME_DESC = 5
 }
 
 object FilterType {

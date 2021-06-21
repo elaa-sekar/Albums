@@ -16,16 +16,16 @@ import com.task.albums.databinding.ActivityAlbumListBinding
 import com.task.albums.ui.album_list.AlbumListViewModel.EventHandler.*
 import com.task.albums.ui.album_list.adapter.AlbumsGridAdapter
 import com.task.albums.ui.album_list.adapter.AlbumsListAdapter
+import com.task.albums.ui.filter.FilterDialogFragment
 import com.task.albums.utils.BindingUtils.viewBinding
 import com.task.albums.utils.ViewType
-import com.task.albums.utils.ViewUtils.hide
 import com.task.albums.utils.ViewUtils.showMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AlbumListActivity : AppCompatActivity(), AlbumListListener {
+class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputListener {
 
     private val binding by viewBinding(ActivityAlbumListBinding::inflate)
     private val viewModel by viewModels<AlbumListViewModel>()
@@ -33,7 +33,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
     private var albumsGridAdapter: AlbumsGridAdapter? = null
     private var albumsListAdapter: AlbumsListAdapter? = null
 
-    var searchTextWatcher: TextWatcher? = null
+    private var searchTextWatcher: TextWatcher? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -177,7 +177,14 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
     }
 
     private fun showFilterDialog() {
-
+        Timber.d("Existing type ${viewModel.selectedFilterType} ${viewModel.selectedSortType}")
+        FilterDialogFragment.newInstance(
+            viewModel.selectedFilterType,
+            viewModel.selectedSortType,
+            this
+        ).apply {
+            show(supportFragmentManager, tag)
+        }
     }
 
     private fun initSearchPhraseListener() {
@@ -209,8 +216,18 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
         }
     }
 
-    override fun updateFavorite(albumId: Long, isFavorite: Boolean) {
+    override fun updateFavorite(albumId: Long, isFavorite: Int) {
         viewModel.updateFavourite(albumId, isFavorite)
     }
 
+    override fun notifyFilterSelected(selectedFilterType: Int, selectedSortType: Int) {
+        viewModel.apply {
+            Timber.d("Filter type $selectedFilterType Sort Type $selectedSortType")
+            updateFilterTypes(selectedFilterType, selectedSortType)
+            updateExistingAlbums()
+        }
+    }
+
 }
+
+
