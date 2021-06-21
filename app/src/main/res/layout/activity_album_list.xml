@@ -156,8 +156,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="@dimen/_164sdp"
                     android:layout_height="@dimen/_164sdp"
+                    android:id="@+id/ivNoDataImage"
                     android:src="@drawable/image_no_data_grey"
-                    android:visibility="@{viewModel.optionsVisibility == View.VISIBLE ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.noDataVisibility}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

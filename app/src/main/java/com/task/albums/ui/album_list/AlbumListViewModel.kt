@@ -51,6 +51,7 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
 
     //    val searchIconVisibility = ObservableField(View.GONE)
     val optionsVisibility = ObservableField(View.GONE)
+    val noDataVisibility = ObservableField(View.GONE)
     val selectedViewType = ObservableField(ViewType.GRID)
 
 
@@ -80,7 +81,6 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
 
     private fun launchTaskInBackground(function: suspend () -> Unit) =
         viewModelScope.launch(Dispatchers.IO + exceptionHandler + job) {
-            triggerEvent(EventHandler.StartLoading)
             function.invoke()
             triggerEvent(EventHandler.StopLoading)
         }
@@ -91,6 +91,10 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
 
     fun updateOptionsVisibility(isListEmpty: Boolean) {
         optionsVisibility.set(if (isListEmpty) View.GONE else View.VISIBLE)
+    }
+
+    fun updateNoDataVisibility(show: Boolean) {
+        noDataVisibility.set(if (show) View.VISIBLE else View.GONE)
     }
 
     fun updateSelectedViewType() {

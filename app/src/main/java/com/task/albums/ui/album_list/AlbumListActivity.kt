@@ -18,6 +18,7 @@ import com.task.albums.ui.album_list.adapter.AlbumsGridAdapter
 import com.task.albums.ui.album_list.adapter.AlbumsListAdapter
 import com.task.albums.utils.BindingUtils.viewBinding
 import com.task.albums.utils.ViewType
+import com.task.albums.utils.ViewUtils.hide
 import com.task.albums.utils.ViewUtils.showMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +44,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
         initOnClickListeners()
         initEventHandler()
         initObservers()
+        binding.swipeRefresh.isRefreshing = true
         viewModel.getAlbums()
     }
 
@@ -58,6 +60,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
             setOnRefreshListener {
                 isRefreshing = true
                 viewModel.apply {
+                    updateNoDataVisibility(false)
                     updateSearchBarVisibility(false)
                     setDefaultFilters()
                     getAlbums()
@@ -86,7 +89,10 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
     private fun updateUI(albumsList: List<Album>?) {
         albumsList?.let {
             updateAlbumsAdapter(albumsList.toMutableList() as ArrayList<Album>)
-            viewModel.updateOptionsVisibility(albumsList.isEmpty())
+            viewModel.apply {
+                updateOptionsVisibility(albumsList.isEmpty())
+                updateNoDataVisibility(albumsList.isEmpty())
+            }
         }
     }
 
