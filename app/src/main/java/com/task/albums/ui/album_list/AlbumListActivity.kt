@@ -18,11 +18,15 @@ import com.task.albums.ui.album_list.adapter.AlbumsGridAdapter
 import com.task.albums.ui.album_list.adapter.AlbumsListAdapter
 import com.task.albums.ui.filter.FilterDialogFragment
 import com.task.albums.utils.BindingUtils.viewBinding
+import com.task.albums.utils.Coroutines
 import com.task.albums.utils.EventType
 import com.task.albums.utils.ViewType
 import com.task.albums.utils.ViewUtils.showMessage
 import com.task.albums.utils.ViewUtils.showMessageInSnackBar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
@@ -143,9 +147,16 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
                     is NotifyEvent -> {
                         showMessage(it.message)
                         try {
-                            if (it.eventType == EventType.ERROR) {
-                                showMessageInSnackBar(binding.coordinatorLayout, "Showing Offline Data")
-                                viewModel.updateExistingAlbums()
+                            Coroutines.main {
+                                if (it.eventType == EventType.ERROR) {
+                                    delay(1000)
+                                    showMessageInSnackBar(
+                                        binding.coordinatorLayout,
+                                        "Showing Offline Data"
+                                    )
+                                    delay(1000)
+                                    viewModel.updateExistingAlbums()
+                                }
                             }
                         } catch (e: Exception) {
                             Timber.d("Snackbar Exception $e")
