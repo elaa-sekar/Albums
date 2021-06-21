@@ -98,7 +98,6 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
 
     private fun updateAlbumsAdapter(albumsList: ArrayList<Album>) {
         viewModel.selectedViewType.get()?.let {
-            setLayoutManager(it)
             if (it == ViewType.GRID) switchToGridView(albumsList)
             else switchToListView(albumsList)
         }
@@ -121,7 +120,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
     private fun switchToGridView(albumsList: ArrayList<Album>) {
         binding.rvAlbums.apply {
             Timber.d("Grid View Update $adapter - ${adapter == albumsGridAdapter}")
-            if (this.adapter != null && adapter == albumsGridAdapter) {
+            if (this.adapter != null && adapter == albumsGridAdapter && layoutManager is LinearLayoutManager) {
                 Timber.d("Grid View Update 2")
                 albumsGridAdapter?.notifyUpdatedList(albumsList)
             } else {
@@ -157,8 +156,9 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
                 showFilterDialog()
             }
             ivViewType.setOnClickListener {
-                with(this@AlbumListActivity.viewModel) {
+                this@AlbumListActivity.viewModel.apply {
                     updateSelectedViewType()
+                    selectedViewType.get()?.let { viewType -> setLayoutManager(viewType) }
                     reloadExistingAlbums()
                 }
             }

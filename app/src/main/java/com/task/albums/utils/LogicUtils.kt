@@ -23,7 +23,11 @@ object LogicUtils {
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return areItemsTheSame(oldItemPosition, newItemPosition)
+            return oldAlbumsList[oldItemPosition].id == newAlbumsList[newItemPosition].id
+                    && oldAlbumsList[oldItemPosition].userId == newAlbumsList[newItemPosition].userId
+                    && oldAlbumsList[oldItemPosition].title == newAlbumsList[newItemPosition].title
+                    && oldAlbumsList[oldItemPosition].userName == newAlbumsList[newItemPosition].userName
+                    && oldAlbumsList[oldItemPosition].isFavourite == newAlbumsList[newItemPosition].isFavourite
         }
     }
 }

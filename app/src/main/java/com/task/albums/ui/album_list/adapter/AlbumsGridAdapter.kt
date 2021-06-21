@@ -16,17 +16,12 @@ class AlbumsGridAdapter(
     var listener: AlbumListListener
 ) : RecyclerView.Adapter<AlbumsGridAdapter.AlbumViewHolder>() {
 
-    init {
-        setHasStableIds(true)
-    }
-
     private lateinit var mRecyclerView: RecyclerView
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         mRecyclerView = recyclerView
         mRecyclerView.itemAnimator?.changeDuration = 0
-        (mRecyclerView.itemAnimator as? SimpleItemAnimator?)?.supportsChangeAnimations = false
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -67,7 +62,6 @@ class AlbumsGridAdapter(
         )
         this.albumsList = albumsList
         diffUtilResult.dispatchUpdatesTo(this)
-        notifyDataSetChanged()
     }
 
     inner class AlbumViewHolder(private val binding: AdapterAlbumGridBinding) :
@@ -82,7 +76,7 @@ class AlbumsGridAdapter(
                 ivFavorite.setOnClickListener {
                     try {
                         albumsList[absoluteAdapterPosition].apply {
-                            listener.updateFavorite(id, if(isFavourite == 0) 1 else 0)
+                            listener.updateFavorite(id, if (isFavourite == 0) 1 else 0)
                         }
                     } catch (e: Exception) {
                         Timber.d("Favorite Selection Exception $e")

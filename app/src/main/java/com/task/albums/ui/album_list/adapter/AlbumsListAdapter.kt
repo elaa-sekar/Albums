@@ -17,9 +17,6 @@ class AlbumsListAdapter(
     var listener: AlbumListListener
 ) : RecyclerView.Adapter<AlbumsListAdapter.AlbumViewHolder>() {
 
-    init {
-        setHasStableIds(true)
-    }
 
     private lateinit var mRecyclerView: RecyclerView
 
