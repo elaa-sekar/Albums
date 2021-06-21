@@ -5,10 +5,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.task.albums.R
 import com.task.albums.data.database.entities.Album
 import com.task.albums.databinding.ActivityAlbumListBinding
 import com.task.albums.ui.album_list.AlbumListViewModel.EventHandler.*
@@ -37,16 +39,40 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
         setContentView(binding.root)
         binding.viewModel = viewModel
         setLayoutManager(ViewType.GRID)
+        initSwipeRefreshListener()
         initOnClickListeners()
         initEventHandler()
         initObservers()
         viewModel.getAlbums()
     }
 
+    private fun initSwipeRefreshListener() {
+        binding.swipeRefresh.apply {
+            setColorSchemeResources(R.color.white)
+            setProgressBackgroundColorSchemeColor(
+                ContextCompat.getColor(
+                    this@AlbumListActivity,
+                    R.color.purple_500
+                )
+            )
+            setOnRefreshListener {
+                isRefreshing = true
+                viewModel.apply {
+                    updateSearchBarVisibility(false)
+                    setDefaultFilters()
+                    getAlbums()
+                }
+            }
+        }
+    }
+
     private fun setLayoutManager(selectedViewType: Int) {
         Timber.d("Selected ViewType $selectedViewType")
         binding.rvAlbums.layoutManager =
-            if (selectedViewType == ViewType.GRID) GridLayoutManager(this, 2) else LinearLayoutManager(this)
+            if (selectedViewType == ViewType.GRID) GridLayoutManager(
+                this,
+                2
+            ) else LinearLayoutManager(this)
     }
 
     private fun initObservers() {
@@ -108,12 +134,8 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener {
             viewModel.eventHandler.collectLatest {
                 when (it) {
                     is NotifyEvent -> showMessage(it.message)
-                    is StartLoading -> {
-
-                    }
-                    is StopLoading -> {
-
-                    }
+                    is StartLoading -> binding.swipeRefresh.isRefreshing = true
+                    is StopLoading -> binding.swipeRefresh.isRefreshing = false
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.task.albums.data.database.dao
 
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.task.albums.data.database.entities.Album
 import com.task.albums.data.database.entities.Favourite
 
@@ -22,7 +23,7 @@ interface AlbumsDao {
         }
     }
 
-    @Query("SELECT * FROM albums ORDER BY RANDOM()")
+    @Query("SELECT * FROM albums ORDER BY title ASC")
     fun getAllAlbums(): List<Album>
 
     @Query("SELECT * FROM albums WHERE id = :albumId")
@@ -30,6 +31,12 @@ interface AlbumsDao {
 
     @Query("SELECT * FROM albums WHERE title LIKE '%' || :searchQuery || '%' OR userName LIKE '%' || :searchQuery || '%' ORDER BY title")
     fun getAlbumsBySearch(searchQuery: String): List<Album>
+
+    @RawQuery
+    fun getAlbumsBySearch(query: SupportSQLiteQuery): List<Album>
+
+    @RawQuery
+    fun getAllAlbums(query: SupportSQLiteQuery): List<Album>
 
     @Query("UPDATE albums SET isFavourite  = :isFavourite WHERE id = :albumId")
     suspend fun updateFavouriteInAlbum(albumId: Long, isFavourite: Boolean)

@@ -1,6 +1,8 @@
 package com.task.albums.data.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.task.albums.data.database.dao.AlbumsDao
 import com.task.albums.data.database.entities.Favourite
 import com.task.albums.data.models.remote.Album
@@ -22,8 +24,8 @@ class AlbumListRepository @Inject constructor(
         albumsDao.insertAlbumsList(albumList)
     }
 
-    fun getAllAlbums(): List<com.task.albums.data.database.entities.Album> {
-        return albumsDao.getAllAlbums()
+    fun getAllAlbums(rawQuery: SimpleSQLiteQuery): List<com.task.albums.data.database.entities.Album> {
+        return albumsDao.getAllAlbums(rawQuery)
     }
 
     suspend fun getFavourite(albumId: Long): Favourite? {
@@ -34,7 +36,7 @@ class AlbumListRepository @Inject constructor(
         albumsDao.insertOrUpdateFavorite(favourite)
     }
 
-    fun searchAlbum(searchPhrase: String): List<com.task.albums.data.database.entities.Album> {
-        return albumsDao.getAlbumsBySearch(searchPhrase)
+    fun searchAlbums(searchQuery: SupportSQLiteQuery): List<com.task.albums.data.database.entities.Album> {
+        return albumsDao.getAlbumsBySearch(searchQuery)
     }
 }

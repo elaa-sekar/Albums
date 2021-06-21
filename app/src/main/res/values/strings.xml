@@ -4,4 +4,10 @@
     <!--    Album   -->
     <string name="album_detail">Album Detail</string>
     <string name="search_album">Search album</string>
+
+    <string name="filter_by">Filter By</string>
+    <string name="sort_by">Sort By</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+
 </resources>
