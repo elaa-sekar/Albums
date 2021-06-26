@@ -84,8 +84,8 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
         }
     }
 
-     /*One common method to run the long running tasks
-     like Network request, DB Update in Worker Thread via Coroutines*/
+    /*One common method to run the long running tasks
+    like Network request, DB Update in Worker Thread via Coroutines*/
     private fun launchTaskInBackground(function: suspend () -> Unit) =
         viewModelScope.launch(Dispatchers.IO + exceptionHandler + job) {
             function.invoke()
@@ -189,6 +189,11 @@ open class AlbumListViewModel @Inject constructor(private val repository: AlbumL
             SortType.USER_NAME_DESC -> "userName DESC"
             else -> "id"
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
 
 }

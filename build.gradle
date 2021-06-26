@@ -15,7 +15,6 @@ buildscript {
         // in the individual module build.gradle files
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.35'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.0'
     }
 }
 

@@ -17,8 +17,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.task.albums.R
 import timber.log.Timber
-import java.nio.ByteBuffer
-import java.util.*
 
 // Singleton Utility Class to have all the extensions of Views
 object ViewUtils {

@@ -132,7 +132,7 @@ class AlbumListActivity : AppCompatActivity(), AlbumListListener, FilterInputLis
     private fun switchToGridView(albumsList: ArrayList<Album>) {
         binding.rvAlbums.apply {
             Timber.d("Grid View Update $adapter - ${adapter == albumsGridAdapter}")
-            if (this.adapter != null && adapter == albumsGridAdapter && layoutManager is LinearLayoutManager) {
+            if (this.adapter != null && adapter == albumsGridAdapter) {
                 Timber.d("Grid View Update 2")
                 albumsGridAdapter?.notifyUpdatedList(albumsList)
             } else {
